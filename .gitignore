@@ -1,0 +1,10 @@
+out/
+bin/
+doc/
+*.class
+*.jar
+*.html
+*.js
+*.png
+*.jpg
+*.css
