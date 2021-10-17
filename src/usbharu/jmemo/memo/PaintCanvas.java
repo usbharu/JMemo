@@ -274,9 +274,15 @@ public class PaintCanvas extends Canvas implements MouseMotionListener, MouseLis
 		canvasPos.x = (int) ((point.x + canvasPos.x) * (reverse(scale) - 1f));
 		canvasPos.y = (int) ((point.y + canvasPos.y) * (reverse(scale) - 1f));
 
+		//キャンパスの左端又は上端が見えているかつ右端又は下端が見えているならリサイズ
 		if ((canvasPos.x < 0 || canvasPos.y < 0) && (bufferImage.getWidth() / scale - canvasPos.x < getWidth() || bufferImage.getHeight() / scale - canvasPos.y < getHeight())) {
-			resize(-canvasPos.x, -canvasPos.y, (int) (bufferImage.getWidth() * scale - canvasPos.x), (int) (bufferImage.getHeight() * scale - canvasPos.y));
+			resize(-canvasPos.x, -canvasPos.y, (int) (bufferImage.getWidth() * scale), (int) (bufferImage.getHeight() * scale));
 			canvasPos.setLocation(0, 0);
+		} else if ((canvasPos.x < 0 || canvasPos.y < 0)) { //キャンパスの左端又は上端が見えているならリサイズ
+			resize(-canvasPos.x, -canvasPos.y, (int) (bufferImage.getWidth() - canvasPos.x * scale), (int) (bufferImage.getHeight() - canvasPos.y * scale));
+			canvasPos.setLocation(0, 0);
+		} else if ((canvasPos.x > 0 || canvasPos.y > 0) && (bufferImage.getWidth() / scale - canvasPos.x < getWidth() || bufferImage.getHeight() / scale - canvasPos.y < getHeight())) { //キャンパスの左端又は上端が見えないかつ右端又は下端が見えているならリサイズ
+			resize(0, 0, bufferImage.getWidth() + (getWidth() - bufferImage.getWidth()), bufferImage.getHeight() + (getHeight() - bufferImage.getHeight()));
 		}
 
 		repaint();
